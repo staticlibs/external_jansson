@@ -13,6 +13,7 @@ include ( ${CMAKE_CURRENT_LIST_DIR}/cmake/CMakeLists_common.cmake )
 # build steps
 OPTION (BUILD_DOCS "Build documentation (uses python-sphinx)." OFF)
 add_subdirectory ( jansson )
+target_compile_definitions( jansson PRIVATE -DVALGRIND=1 )
 set ( ${PROJECT_NAME}_INCLUDES ${CMAKE_CURRENT_BINARY_DIR}/jansson/include )
 
 # test
