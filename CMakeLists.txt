@@ -18,6 +18,10 @@ add_subdirectory ( jansson )
 # workaround janssons' cflags rewrite
 get_property ( ${PROJECT_NAME}_COMPILE_FLAGS TARGET jansson PROPERTY COMPILE_FLAGS)
 set_target_properties( jansson PROPERTIES COMPILE_FLAGS "${${PROJECT_NAME}_COMPILE_FLAGS} ${CMAKE_C_FLAGS}" )
+if ( MSVC )
+    get_property ( ${PROJECT_NAME}_COMPILE_FLAGS TARGET jansson PROPERTY COMPILE_FLAGS)
+    set_target_properties( jansson PROPERTIES COMPILE_FLAGS "${${PROJECT_NAME}_COMPILE_FLAGS} /wd4706" )
+endif ( )
 target_compile_definitions( jansson PRIVATE -DVALGRIND=1 )
 set ( ${PROJECT_NAME}_INCLUDES ${CMAKE_CURRENT_BINARY_DIR}/jansson/include )
 
