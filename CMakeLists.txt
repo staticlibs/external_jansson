@@ -12,7 +12,12 @@ include ( ${CMAKE_CURRENT_LIST_DIR}/cmake/CMakeLists_common.cmake )
 
 # build steps
 OPTION (BUILD_DOCS "Build documentation (uses python-sphinx)." OFF)
+# there are complication with linking tests for i386
+OPTION (WITHOUT_TESTS "Don't build tests ('make test' to execute tests)" ON)
 add_subdirectory ( jansson )
+# workaround janssons' cflags rewrite
+get_property ( ${PROJECT_NAME}_COMPILE_FLAGS TARGET jansson PROPERTY COMPILE_FLAGS)
+set_target_properties( jansson PROPERTIES COMPILE_FLAGS "${${PROJECT_NAME}_COMPILE_FLAGS} ${CMAKE_C_FLAGS}" )
 target_compile_definitions( jansson PRIVATE -DVALGRIND=1 )
 set ( ${PROJECT_NAME}_INCLUDES ${CMAKE_CURRENT_BINARY_DIR}/jansson/include )
 
