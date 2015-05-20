@@ -22,8 +22,8 @@ unless you are using GCC on Linux x86_64 (`linux_amd64_gcc` toolchain) that is d
 Example build for Windows x86_64 with Visual Studio 2013 Express, run the following commands 
 from the development shell `C:\Program Files (x86)\Microsoft Visual Studio 12.0\Common7\Tools\Shortcuts\VS2013 x64 Cross Tools Command Prompt` :
 
-    git clone https://github.com/staticlibs/staticlib_utils.git
-    cd staticlib_utils
+    git clone https://github.com/staticlibs/external_jansson.git
+    cd external_jansson
     git submodule update --init --recursive
     mkdir build
     cd build
