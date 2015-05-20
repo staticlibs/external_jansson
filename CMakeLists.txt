@@ -20,7 +20,7 @@ set ( CMAKE_TOOLCHAIN_FILE ${CMAKE_CURRENT_LIST_DIR}/cmake/toolchains/${STATICLI
 
 # project setup
 project ( external_jansson CXX )
-set ( ${PROJECT_NAME}_STATICLIB_VERSION 2.6 )
+set ( ${PROJECT_NAME}_STATICLIB_VERSION 2.6.0 )
 # common include
 include ( ${CMAKE_CURRENT_LIST_DIR}/cmake/staticlibs_common.cmake )
 
@@ -37,11 +37,16 @@ if ( STATICLIB_TOOLCHAIN MATCHES "windows_[^_]+_msvc" )
     target_compile_options ( jansson PRIVATE /wd4706 )
 endif ( )
 target_compile_definitions ( jansson PRIVATE -DVALGRIND=1 )
+# allow to use jansson under external_jansson name
+add_library( ${PROJECT_NAME} STATIC IMPORTED GLOBAL )
+add_dependencies ( ${PROJECT_NAME} jansson ) 
+set_target_properties( ${PROJECT_NAME} PROPERTIES IMPORTED_LOCATION 
+        ${CMAKE_CURRENT_BINARY_DIR}/jansson/lib/libjansson${CMAKE_STATIC_LIBRARY_SUFFIX} )
 set ( ${PROJECT_NAME}_INCLUDES ${CMAKE_CURRENT_BINARY_DIR}/jansson/include )
 
 # test
 set ( ${PROJECT_NAME}_TEST_INCLUDES ${${PROJECT_NAME}_INCLUDES} )
-set ( ${PROJECT_NAME}_TEST_LIBS jansson )
+set ( ${PROJECT_NAME}_TEST_LIBS ${PROJECT_NAME} )
 set ( ${PROJECT_NAME}_TEST_OPTS "" )
 staticlib_enable_testing ( ${PROJECT_NAME}_TEST_INCLUDES ${PROJECT_NAME}_TEST_LIBS ${PROJECT_NAME}_TEST_OPTS )
 
