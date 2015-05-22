@@ -25,9 +25,10 @@ set ( ${PROJECT_NAME}_STATICLIB_VERSION 2.6.0 )
 include ( ${CMAKE_CURRENT_LIST_DIR}/cmake/staticlibs_common.cmake )
 
 # build steps
-OPTION (BUILD_DOCS "Build documentation (uses python-sphinx)." OFF)
+SET ( BUILD_DOCS OFF CACHE BOOL "" )
 # there are complication with linking tests for i386
-OPTION (WITHOUT_TESTS "Don't build tests ('make test' to execute tests)" ON)
+SET ( WITHOUT_TESTS ON CACHE BOOL "" )
+SET ( STATIC_CRT ON CACHE BOOL "" )
 add_subdirectory ( jansson )
 # workaround jansson's cflags rewrite, first attempt won't work because of quotation
 # target_compile_options ( jansson PRIVATE ${CMAKE_C_FLAGS} )
