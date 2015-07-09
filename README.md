@@ -41,6 +41,10 @@ This project is released under the [Apache License 2.0](http://www.apache.org/li
 Changelog
 ---------
 
+**2015-07-09**
+
+ * version 2.6.0.2 - toolchains update
+
 **2015-06-30**
 
  * version 2.6.0.1 - toolchains update

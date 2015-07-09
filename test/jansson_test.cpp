@@ -33,7 +33,7 @@ int main() {
     auto st1 = json_string("foo");
     assert(st1);
     auto err = json_object_set(obj, "bar", st1);
-    assert(!err);
+    (void) err; assert(!err);
     auto res = json_dumps(obj, 0);
     assert(std::string("{\"bar\": \"foo\"}") == std::string(res));
 
