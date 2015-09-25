@@ -28,6 +28,7 @@ SET ( STATIC_CRT ON CACHE BOOL "" )
 
 # jansson library
 add_subdirectory ( jansson )
+add_custom_target ( ${PROJECT_NAME} DEPENDS jansson )
 # workaround jansson's cflags rewrite, first attempt won't work because of quotation
 # target_compile_options ( jansson PRIVATE ${CMAKE_C_FLAGS} )
 get_property ( ${PROJECT_NAME}_COMPILE_FLAGS TARGET jansson PROPERTY COMPILE_FLAGS)
