@@ -16,15 +16,36 @@ How to build
 
 [CMake](http://cmake.org/) is required for building.
 
-[TODO]
+To build the library on Windows using Visual Studio 2013 Express run the following commands using
+Visual Studio development command prompt 
+(`C:\Program Files (x86)\Microsoft Visual Studio 12.0\Common7\Tools\Shortcuts\VS2013 x86 Native Tools Command Prompt`):
+
+    git clone --recursive https://github.com/staticlibs/external_jansson.git
+    cd external_jansson
+    mkdir build
+    cd build
+    cmake ..
+    msbuild external_jansson.sln
+
+To build on other platforms using GCC or Clang with GNU Make:
+
+    cmake .. -DCMAKE_CXX_FLAGS="--std=c++11"
+    make
+
+See [StaticlibsToolchains](https://github.com/staticlibs/wiki/wiki/StaticlibsToolchains) for 
+more information about the toolchain setup and cross-compilation.
 
 License information
 -------------------
 
-This project is released under the [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0)
+This project is released under the [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0).
 
 Changelog
 ---------
+
+**2015-11-01**
+
+ * version 2.6.0.3 - pkg-config integration
 
 **2015-07-09**
 

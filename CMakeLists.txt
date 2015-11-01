@@ -26,22 +26,25 @@ SET ( BUILD_DOCS OFF CACHE BOOL "" )
 SET ( WITHOUT_TESTS ON CACHE BOOL "" )
 SET ( STATIC_CRT ON CACHE BOOL "" )
 
+# compile flags
+if ( CMAKE_BUILD_TYPE MATCHES "Debug" )
+    set ( ${PROJECT_NAME}_CFLAGS "${CMAKE_C_FLAGS} ${CMAKE_C_FLAGS_DEBUG}" )
+endif ( )
+if ( CMAKE_BUILD_TYPE MATCHES "Release" )
+    set ( ${PROJECT_NAME}_CFLAGS "${CMAKE_C_FLAGS} ${CMAKE_C_FLAGS_RELEASE}" )
+endif ( )
+
 # jansson library
 add_subdirectory ( jansson )
 add_custom_target ( ${PROJECT_NAME} DEPENDS jansson )
-# workaround jansson's cflags rewrite, first attempt won't work because of quotation
-# target_compile_options ( jansson PRIVATE ${CMAKE_C_FLAGS} )
 get_property ( ${PROJECT_NAME}_COMPILE_FLAGS TARGET jansson PROPERTY COMPILE_FLAGS)
-set_target_properties( jansson PROPERTIES COMPILE_FLAGS "${${PROJECT_NAME}_COMPILE_FLAGS} ${CMAKE_C_FLAGS}" )
+set_target_properties( jansson PROPERTIES COMPILE_FLAGS "${${PROJECT_NAME}_COMPILE_FLAGS} ${${PROJECT_NAME}_CFLAGS}" )
 set ( ${PROJECT_NAME}_OPTIONS "")
 if ( ${CMAKE_CXX_COMPILER_ID}x MATCHES "MSVCx" )
     set ( ${PROJECT_NAME}_OPTIONS "${${PROJECT_NAME}_OPTIONS} /wd4706")
 endif ( )
 target_compile_options ( jansson PRIVATE ${${PROJECT_NAME}_OPTIONS} )
 target_compile_definitions ( jansson PRIVATE -DVALGRIND=1 )
-
-
-set ( ${PROJECT_NAME}_INCLUDES ${CMAKE_CURRENT_BINARY_DIR}/jansson/include )
 
 # pkg-config
 if ( NOT DEFINED CMAKE_LIBRARY_OUTPUT_DIRECTORY )
