@@ -16,35 +16,18 @@ cmake_minimum_required ( VERSION 2.8.12 )
 
 # project
 project ( external_jansson CXX C )
-set ( ${PROJECT_NAME}_STATICLIB_VERSION 2.6.0.3 )
+set ( ${PROJECT_NAME}_STATICLIB_VERSION 2.6.0.4 )
 set ( ${PROJECT_NAME}_DESCRIPTION "Jansson JSON library build for Staticlibs" )
 set ( ${PROJECT_NAME}_URL https://github.com/staticlibs/external_jansson )
 
-# options
-SET ( BUILD_DOCS OFF CACHE BOOL "" )
-# there are complication with linking tests for i386
-SET ( WITHOUT_TESTS ON CACHE BOOL "" )
-SET ( STATIC_CRT ON CACHE BOOL "" )
-
-# compile flags
-if ( CMAKE_BUILD_TYPE MATCHES "Debug" )
-    set ( ${PROJECT_NAME}_CFLAGS "${CMAKE_C_FLAGS} ${CMAKE_C_FLAGS_DEBUG}" )
-endif ( )
-if ( CMAKE_BUILD_TYPE MATCHES "Release" )
-    set ( ${PROJECT_NAME}_CFLAGS "${CMAKE_C_FLAGS} ${CMAKE_C_FLAGS_RELEASE}" )
-endif ( )
-
 # jansson library
-add_subdirectory ( jansson )
+add_subdirectory ( ${CMAKE_CURRENT_LIST_DIR}/resources/jansson_26_cmake ${CMAKE_CURRENT_BINARY_DIR}/jansson )
 add_custom_target ( ${PROJECT_NAME} DEPENDS jansson )
-get_property ( ${PROJECT_NAME}_COMPILE_FLAGS TARGET jansson PROPERTY COMPILE_FLAGS)
-set_target_properties( jansson PROPERTIES COMPILE_FLAGS "${${PROJECT_NAME}_COMPILE_FLAGS} ${${PROJECT_NAME}_CFLAGS}" )
+
 set ( ${PROJECT_NAME}_OPTIONS "")
 if ( ${CMAKE_CXX_COMPILER_ID}x MATCHES "MSVCx" )
     set ( ${PROJECT_NAME}_OPTIONS "${${PROJECT_NAME}_OPTIONS} /wd4706")
 endif ( )
-target_compile_options ( jansson PRIVATE ${${PROJECT_NAME}_OPTIONS} )
-target_compile_definitions ( jansson PRIVATE -DVALGRIND=1 )
 
 # pkg-config
 if ( NOT DEFINED CMAKE_LIBRARY_OUTPUT_DIRECTORY )
