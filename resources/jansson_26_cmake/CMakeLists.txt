@@ -18,6 +18,9 @@ project ( jansson C )
 
 set ( ${PROJECT_NAME}_SOURCE_DIR ${CMAKE_CURRENT_LIST_DIR}/../../jansson )
 
+OPTION (USE_URANDOM "Use /dev/urandom to seed the hash function." ON)
+OPTION (USE_WINDOWS_CRYPTOAPI "Use CryptGenRandom to seed the hash function." ON)
+
 # for CheckFunctionKeywords
 set ( CMAKE_MODULE_PATH "${${PROJECT_NAME}_SOURCE_DIR}/cmake" )
 
@@ -220,7 +223,7 @@ target_compile_definitions ( jansson PRIVATE -DHAVE_CONFIG_H )
 target_compile_definitions ( jansson PRIVATE -DVALGRIND=1 )
 if ( ${CMAKE_CXX_COMPILER_ID}x MATCHES "MSVCx" )
     target_compile_definitions ( jansson PRIVATE -D_CRT_SECURE_NO_WARNINGS )
-    target_compile_options ( jansson PRIVATE "/wd4005 /wd4996 /wd4706" )
+    target_compile_options ( jansson PRIVATE /wd4005 /wd4996 /wd4706 )
 endif ( )
 
 
