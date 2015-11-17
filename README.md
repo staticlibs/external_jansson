@@ -43,7 +43,7 @@ Changelog
 
 **2015-11-17**
 
- * version 2.6.0.3
+ * version 2.6.0.4
  * custom cmake script
  * deplibs cache support
 
