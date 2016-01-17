@@ -21,26 +21,36 @@
  * Created on February 15, 2015, 7:40 PM
  */
 
-#include <cassert>
-#include <cstdlib>
+#include <iostream>
 #include <string>
+#include <cstdlib>
 
 #include "jansson.h"
 
-int main() {
+#include "staticlib/config/assert.hpp"
+
+void test_jansson() {
     auto obj = json_object();
-    assert(obj);
+    slassert(obj);
     auto st1 = json_string("foo");
-    assert(st1);
+    slassert(st1);
     auto err = json_object_set(obj, "bar", st1);
-    (void) err; assert(!err);
+    slassert(!err);
     auto res = json_dumps(obj, 0);
-    assert(std::string("{\"bar\": \"foo\"}") == std::string(res));
+    slassert(std::string("{\"bar\": \"foo\"}") == std::string(res));
 
     json_decref(obj);
     json_decref(st1);
     free(res);
+}
 
+int main() {
+    try {
+        test_jansson();
+    } catch (const std::exception& e) {
+        std::cout << e.what() << std::endl;
+        return 1;
+    }
     return 0;
 }
 

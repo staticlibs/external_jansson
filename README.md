@@ -7,7 +7,7 @@ This project contains a CMake wrapper for the [Jansson library](https://github.c
 
 Jansson GitHub repository is used as a git submodule of this project. Jannson is pinned to version 2.6.
 
-Link to [API documentation](https://jansson.readthedocs.org/en/2.6/).
+Link to the [API documentation](https://jansson.readthedocs.org/en/2.6/).
 
 How to build
 ------------
@@ -25,11 +25,6 @@ Visual Studio development command prompt
     cmake ..
     msbuild external_jansson.sln
 
-To build on other platforms using GCC or Clang with GNU Make:
-
-    cmake .. -DCMAKE_CXX_FLAGS="--std=c++11"
-    make
-
 See [StaticlibsToolchains](https://github.com/staticlibs/wiki/wiki/StaticlibsToolchains) for 
 more information about the toolchain setup and cross-compilation.
 
@@ -40,6 +35,11 @@ This project is released under the [Apache License 2.0](http://www.apache.org/li
 
 Changelog
 ---------
+
+**2016-01-17**
+
+ * version 2.6.0.5
+ * minor CMake changes
 
 **2015-11-17**
 
