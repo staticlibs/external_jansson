@@ -206,7 +206,9 @@ target_include_directories ( jansson BEFORE PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/
 target_compile_definitions ( jansson PRIVATE -DHAVE_CONFIG_H )
 target_compile_definitions ( jansson PRIVATE -DVALGRIND=1 )
 if ( ${CMAKE_CXX_COMPILER_ID}x MATCHES "MSVCx" )
-    target_compile_definitions ( jansson PRIVATE -D_CRT_SECURE_NO_WARNINGS )
+    target_compile_definitions ( jansson PRIVATE 
+            -D_CRT_SECURE_NO_WARNINGS
+            -Dinline=_inline )
     target_compile_options ( jansson PRIVATE /wd4005 /wd4996 /wd4706 )
 endif ( )
 
