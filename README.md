@@ -3,9 +3,10 @@ Jansson JSON library build for Staticlibs
 
 This project is a part of [Staticlibs](http://staticlibs.net/).
 
-This project contains a CMake wrapper for the [Jansson library](https://github.com/akheron/jansson). 
+This project contains a CMake wrapper for the [Jansson library](http://www.digip.org/jansson/). 
 
-Jansson GitHub repository is used as a git submodule of this project. Jannson is pinned to version 2.6.
+Jansson sources imported from CentOS lookaside](https://github.com/ojdkbuild/lookaside_jansson.git)
+are used as a submodule of this project.
 
 Link to the [API documentation](https://jansson.readthedocs.org/en/2.6/).
 
@@ -35,6 +36,11 @@ This project is released under the [Apache License 2.0](http://www.apache.org/li
 
 Changelog
 ---------
+
+**2016-10-30**
+
+ * version 2.4-1
+ * use Jansson sources from CentOS
 
 **2016-01-17**
 

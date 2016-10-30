@@ -26,7 +26,6 @@ set ( CMAKE_MODULE_PATH "${${PROJECT_NAME}_SOURCE_DIR}/cmake" )
 
 include (CheckCSourceCompiles)
 include (CheckFunctionExists)
-include (CheckFunctionKeywords)
 include (CheckIncludeFiles)
 include (CheckTypeSize)
 
@@ -159,22 +158,7 @@ endif ()
 # check if we have setlocale
 check_function_exists (setlocale HAVE_SETLOCALE)
 
-# Check what the inline keyword is.
-# Note that the original JSON_INLINE was always set to just 'inline', so this goes further.
-check_function_keywords("inline")
-check_function_keywords("__inline")
-check_function_keywords("__inline__")
-
-if (HAVE_INLINE)
-   set (JSON_INLINE inline)
-elseif (HAVE___INLINE)
-   set (JSON_INLINE __inline)
-elseif (HAVE___INLINE__)
-   set (JSON_INLINE __inline__)
-else (HAVE_INLINE)
-   # no inline on this platform
-   set (JSON_INLINE)
-endif (HAVE_INLINE)
+set ( JSON_INLINE inline )
 
 # Find our snprintf
 check_function_exists (snprintf HAVE_SNPRINTF)
@@ -190,7 +174,7 @@ check_c_source_compiles ("int main() { unsigned long val; __sync_bool_compare_an
 check_c_source_compiles ("int main() { char l; unsigned long v; __atomic_test_and_set(&l, __ATOMIC_RELAXED); __atomic_store_n(&v, 1, __ATOMIC_RELEASE); __atomic_load_n(&v, __ATOMIC_ACQUIRE); return 0; }" HAVE_ATOMIC_BUILTINS)
 
 # configure the public config file
-configure_file (${${PROJECT_NAME}_SOURCE_DIR}/cmake/jansson_config.h.cmake
+configure_file (${CMAKE_CURRENT_LIST_DIR}/jansson_config.h.cmake
                 ${CMAKE_CURRENT_BINARY_DIR}/include/jansson_config.h)
 
 # Copy the jansson.h file to the public include folder
@@ -199,7 +183,7 @@ file (COPY ${${PROJECT_NAME}_SOURCE_DIR}/src/jansson.h
 
 
 # configure the private config file
-configure_file (${${PROJECT_NAME}_SOURCE_DIR}/cmake/config.h.cmake
+configure_file (${CMAKE_CURRENT_LIST_DIR}/config.h.cmake
                 ${CMAKE_CURRENT_BINARY_DIR}/private_include/config.h)
 
 

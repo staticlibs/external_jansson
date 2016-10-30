@@ -16,7 +16,7 @@ cmake_minimum_required ( VERSION 2.8.12 )
 
 # project
 project ( external_jansson CXX C )
-set ( ${PROJECT_NAME}_STATICLIB_VERSION 2.6.0.5 )
+set ( ${PROJECT_NAME}_STATICLIB_VERSION 2.4-1 )
 set ( ${PROJECT_NAME}_DESCRIPTION "Jansson JSON library build for Staticlibs" )
 set ( ${PROJECT_NAME}_URL https://github.com/staticlibs/external_jansson )
 
@@ -26,7 +26,7 @@ if ( NOT DEFINED CMAKE_LIBRARY_OUTPUT_DIRECTORY )
 endif ( )
 
 # jansson library
-add_subdirectory ( ${CMAKE_CURRENT_LIST_DIR}/resources/jansson_26_cmake ${CMAKE_CURRENT_BINARY_DIR}/jansson )
+add_subdirectory ( ${CMAKE_CURRENT_LIST_DIR}/resources/jansson_24_cmake ${CMAKE_CURRENT_BINARY_DIR}/jansson )
 add_custom_target ( ${PROJECT_NAME} DEPENDS jansson )
 
 set ( ${PROJECT_NAME}_OPTIONS "")
