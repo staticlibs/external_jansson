@@ -27,6 +27,7 @@ endif ( )
 
 # jansson library
 add_subdirectory ( ${CMAKE_CURRENT_LIST_DIR}/resources/jansson_24_cmake ${CMAKE_CURRENT_BINARY_DIR}/jansson )
+set_target_properties ( jansson PROPERTIES FOLDER "deps" )
 add_custom_target ( ${PROJECT_NAME} DEPENDS jansson )
 
 set ( ${PROJECT_NAME}_OPTIONS "")
