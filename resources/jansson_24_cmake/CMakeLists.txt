@@ -18,7 +18,7 @@ project ( jansson C )
 
 set ( ${PROJECT_NAME}_SOURCE_DIR ${CMAKE_CURRENT_LIST_DIR}/../../jansson )
 
-if ( STATICLIB_TOOLCHAIN MATCHES "windows_[^_]+_msvc" )
+if ( STATICLIB_TOOLCHAIN MATCHES "(android|windows)_[^_]+_[^_]+" )
     file (COPY ${CMAKE_CURRENT_LIST_DIR}/${STATICLIB_TOOLCHAIN}/jansson_config.h
             DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/include/)
     file (COPY ${CMAKE_CURRENT_LIST_DIR}/${STATICLIB_TOOLCHAIN}/config.h
