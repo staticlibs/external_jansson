@@ -16,7 +16,7 @@ cmake_minimum_required ( VERSION 2.8.12 )
 
 # project
 project ( external_jansson CXX C )
-set ( ${PROJECT_NAME}_STATICLIB_VERSION 2.4-1 )
+set ( ${PROJECT_NAME}_STATICLIB_VERSION 2.4-2 )
 set ( ${PROJECT_NAME}_DESCRIPTION "Jansson JSON library build for Staticlibs" )
 set ( ${PROJECT_NAME}_URL https://github.com/staticlibs/external_jansson )
 

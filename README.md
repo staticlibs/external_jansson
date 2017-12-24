@@ -1,6 +1,9 @@
 Jansson JSON library build for Staticlibs
 =========================================
 
+[![travis](https://travis-ci.org/staticlibs/external_jansson.svg?branch=master)](https://travis-ci.org/staticlibs/external_jansson)
+[![appveyor](https://ci.appveyor.com/api/projects/status/github/staticlibs/external_jansson?svg=true)](https://ci.appveyor.com/project/staticlibs/external-jansson)
+
 This project is a part of [Staticlibs](http://staticlibs.net/).
 
 This project contains a CMake wrapper for the [Jansson library](http://www.digip.org/jansson/). 
@@ -8,7 +11,7 @@ This project contains a CMake wrapper for the [Jansson library](http://www.digip
 Jansson sources imported from CentOS lookaside](https://github.com/ojdkbuild/lookaside_jansson.git)
 are used as a submodule of this project.
 
-Link to the [API documentation](https://jansson.readthedocs.org/en/2.6/).
+Link to the [documentation](https://jansson.readthedocs.org/en/2.6/).
 
 How to build
 ------------
@@ -36,6 +39,10 @@ This project is released under the [Apache License 2.0](http://www.apache.org/li
 
 Changelog
 ---------
+
+**2017-12-24**
+ * version 2.4-2
+ * vs2017 support
 
 **2016-10-30**
 
