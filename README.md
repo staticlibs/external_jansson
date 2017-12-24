@@ -8,7 +8,7 @@ This project is a part of [Staticlibs](http://staticlibs.net/).
 
 This project contains a CMake wrapper for the [Jansson library](http://www.digip.org/jansson/). 
 
-Jansson sources imported from CentOS lookaside](https://github.com/ojdkbuild/lookaside_jansson.git)
+Jansson sources imported from [CentOS lookaside](https://github.com/ojdkbuild/lookaside_jansson.git)
 are used as a submodule of this project.
 
 Link to the [documentation](https://jansson.readthedocs.org/en/2.6/).

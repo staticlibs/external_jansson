@@ -20,6 +20,9 @@ set ( ${PROJECT_NAME}_STATICLIB_VERSION 2.4-2 )
 set ( ${PROJECT_NAME}_DESCRIPTION "Jansson JSON library build for Staticlibs" )
 set ( ${PROJECT_NAME}_URL https://github.com/staticlibs/external_jansson )
 
+# options, use set ( OPTNAME ON CACHE BOOL "") in parent to override
+option ( ${PROJECT_NAME}_ENABLE_PRECONFIGURATION "Skip configure-step checks and use preconfigured config headers" OFF )
+
 # standalone build
 if ( NOT DEFINED CMAKE_LIBRARY_OUTPUT_DIRECTORY )
     set ( CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR} )
