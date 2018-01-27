@@ -11,7 +11,7 @@ This project contains a CMake wrapper for the [Jansson library](http://www.digip
 Jansson sources imported from [CentOS lookaside](https://github.com/ojdkbuild/lookaside_jansson.git)
 are used as a submodule of this project.
 
-Link to the [documentation](https://jansson.readthedocs.org/en/2.6/).
+Link to the [documentation](https://jansson.readthedocs.org/en/2.10/).
 
 How to build
 ------------
@@ -40,7 +40,13 @@ This project is released under the [Apache License 2.0](http://www.apache.org/li
 Changelog
 ---------
 
+**2018-01-27**
+
+ * version 2.10-1
+ * update Jansson to rebased version from CentOS 7.4
+
 **2017-12-24**
+
  * version 2.4-2
  * vs2017 support
 

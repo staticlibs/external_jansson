@@ -12,17 +12,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# this file is based on https://github.com/akheron/jansson/blob/v2.6/CMakeLists.txt
+# this file is based on https://github.com/akheron/jansson/blob/v2.10/CMakeLists.txt
 cmake_minimum_required ( VERSION 2.8.12 )
 project ( jansson C )
 
 set ( ${PROJECT_NAME}_SOURCE_DIR ${CMAKE_CURRENT_LIST_DIR}/../../jansson )
 
-if ( external_jansson_ENABLE_PRECONFIGURATION AND STATICLIB_TOOLCHAIN MATCHES "(android|windows|macosx)_[^_]+_[^_]+" )
+if ( external_jansson_ENABLE_PRECONFIGURATION AND STATICLIB_TOOLCHAIN MATCHES "(android|windows)_[^_]+_[^_]+" )
     file (COPY ${CMAKE_CURRENT_LIST_DIR}/${STATICLIB_TOOLCHAIN}/jansson_config.h
             DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/include/)
-    file (COPY ${CMAKE_CURRENT_LIST_DIR}/${STATICLIB_TOOLCHAIN}/config.h
-            DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/private_include/)            
+    file (COPY ${CMAKE_CURRENT_LIST_DIR}/${STATICLIB_TOOLCHAIN}/jansson_private_config.h
+            DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/private_include/)
 
 else ( )
 
@@ -34,10 +34,11 @@ else ( )
 
     include (CheckCSourceCompiles)
     include (CheckFunctionExists)
+    include (CheckFunctionKeywords)
     include (CheckIncludeFiles)
     include (CheckTypeSize)
 
-    check_include_files ( endian.h HAVE_ENDIAN_H)
+    check_include_files (endian.h HAVE_ENDIAN_H)
     check_include_files (fcntl.h HAVE_FCNTL_H)
     check_include_files (sched.h HAVE_SCHED_H)
     check_include_files (unistd.h HAVE_UNISTD_H)
@@ -78,10 +79,12 @@ else ( )
        message (FATAL_ERROR "Could not detect a valid 32-bit integer type")
     endif ()
 
-    check_type_size (uint32_t UINT32_T)
-    check_type_size (__uint32 __UINT32)
     check_type_size ("unsigned long" UNSIGNED_LONG_INT)
     check_type_size ("unsigned int" UNSIGNED_INT)
+    check_type_size ("unsigned short" UNSIGNED_SHORT)
+
+    check_type_size (uint32_t UINT32_T)
+    check_type_size (__uint32 __UINT32)
     if (HAVE_UINT32_T)
        set (JSON_UINT32 uint32_t)
     elseif (HAVE___UINT32)
@@ -92,6 +95,30 @@ else ( )
        set (JSON_UINT32 "unsigned int")
     else ()
        message (FATAL_ERROR "Could not detect a valid unsigned 32-bit integer type")
+    endif ()
+
+    check_type_size (uint16_t UINT16_T)
+    check_type_size (__uint16 __UINT16)
+    if (HAVE_UINT16_T)
+       set (JSON_UINT16 uint16_t)
+    elseif (HAVE___UINT16)
+       set (JSON_UINT16 __uint16)
+    elseif (HAVE_UNSIGNED_INT AND (${UNSIGNED_INT} EQUAL 2))
+       set (JSON_UINT16 "unsigned int")
+    elseif (HAVE_UNSIGNED_SHORT AND (${UNSIGNED_SHORT} EQUAL 2))
+       set (JSON_UINT16 "unsigned short")
+    else ()
+       message (FATAL_ERROR "Could not detect a valid unsigned 16-bit integer type")
+    endif ()
+
+    check_type_size (uint8_t UINT8_T)
+    check_type_size (__uint8 __UINT8)
+    if (HAVE_UINT8_T)
+       set (JSON_UINT8 uint8_t)
+    elseif (HAVE___UINT8)
+       set (JSON_UINT8 __uint8)
+    else ()
+       set (JSON_UINT8 "unsigned char")
     endif ()
 
     # Check for ssize_t and SSIZE_T existance.
@@ -130,7 +157,7 @@ else ( )
     # detect what to use for the 64 bit type.
     # Note: I will prefer long long if I can get it, as that is what the automake system aimed for.
     if (NOT DEFINED JSON_INT_T)
-       if (HAVE_LONG_LONG_INT AND (${LONG_LONG_INT} EQUAL 8))
+       if (HAVE_LONG_LONG_INT AND ((${LONG_LONG_INT}) EQUAL 8))
           set (JSON_INT_T "long long")
        elseif (HAVE_INT64_T)
           set (JSON_INT_T int64_t)
@@ -161,38 +188,46 @@ else ( )
        set (JSON_HAVE_LOCALECONV 1)
     else ()
        set (JSON_HAVE_LOCALECONV 0)
-    endif ()
+    endif()
 
     # check if we have setlocale
-    check_function_exists (setlocale HAVE_SETLOCALE)
+    check_function_exists(setlocale HAVE_SETLOCALE)
 
-    set ( JSON_INLINE inline )
+    # Check what the inline keyword is.
+    # Note that the original JSON_INLINE was always set to just 'inline', so this goes further.
+    check_function_keywords("inline")
+    check_function_keywords("__inline")
+    check_function_keywords("__inline__")
 
-    # Find our snprintf
-    check_function_exists (snprintf HAVE_SNPRINTF)
-    check_function_exists (_snprintf HAVE__SNPRINTF)
-
-    if (HAVE_SNPRINTF)
-       set (JSON_SNPRINTF snprintf)
-    elseif (HAVE__SNPRINTF)
-       set (JSON_SNPRINTF _snprintf)
-    endif ()
+    if (HAVE_INLINE)
+       set(JSON_INLINE inline)
+    elseif (HAVE___INLINE)
+       set(JSON_INLINE __inline)
+    elseif (HAVE___INLINE__)
+       set(JSON_INLINE __inline__)
+    else()
+       # no inline on this platform
+       set (JSON_INLINE)
+    endif()
 
     check_c_source_compiles ("int main() { unsigned long val; __sync_bool_compare_and_swap(&val, 0, 1); return 0; } " HAVE_SYNC_BUILTINS)
     check_c_source_compiles ("int main() { char l; unsigned long v; __atomic_test_and_set(&l, __ATOMIC_RELAXED); __atomic_store_n(&v, 1, __ATOMIC_RELEASE); __atomic_load_n(&v, __ATOMIC_ACQUIRE); return 0; }" HAVE_ATOMIC_BUILTINS)
 
+    set (JANSSON_INITIAL_HASHTABLE_ORDER 3 CACHE STRING "Number of buckets new object hashtables contain is 2 raised to this power. The default is 3, so empty hashtables contain 2^3 = 8 buckets.")
+
     # configure the public config file
-    configure_file (${CMAKE_CURRENT_LIST_DIR}/jansson_config.h.cmake
+    configure_file (${${PROJECT_NAME}_SOURCE_DIR}/cmake/jansson_config.h.cmake
                     ${CMAKE_CURRENT_BINARY_DIR}/include/jansson_config.h)
 
-    # configure the private config file
-    configure_file (${CMAKE_CURRENT_LIST_DIR}/config.h.cmake
-                    ${CMAKE_CURRENT_BINARY_DIR}/private_include/config.h)                
-endif ( )                
+    # Copy the jansson.h file to the public include folder
+    file (COPY ${${PROJECT_NAME}_SOURCE_DIR}/src/jansson.h
+               DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/include/)
 
-# Copy the jansson.h file to the public include folder
-file (COPY ${${PROJECT_NAME}_SOURCE_DIR}/src/jansson.h
-        DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/include/)
+    # configure the private config file
+    configure_file (${${PROJECT_NAME}_SOURCE_DIR}/cmake/jansson_private_config.h.cmake
+                    ${CMAKE_CURRENT_BINARY_DIR}/private_include/jansson_private_config.h)
+
+endif ( )
 
 # check deplibs cache
 if ( STATICLIB_USE_DEPLIBS_CACHE )
@@ -207,16 +242,17 @@ endif ( )
 
 # Add the lib sources.
 file ( GLOB C_FILES ${${PROJECT_NAME}_SOURCE_DIR}/src/*.c )
-add_library ( jansson STATIC ${C_FILES} )
-target_include_directories ( jansson BEFORE PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/include)
-target_include_directories ( jansson BEFORE PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/private_include)
-target_compile_definitions ( jansson PRIVATE -DHAVE_CONFIG_H )
-target_compile_definitions ( jansson PRIVATE -DVALGRIND=1 )
+add_library ( ${PROJECT_NAME} STATIC ${C_FILES} )
+target_include_directories ( jansson BEFORE PRIVATE
+        ${CMAKE_CURRENT_BINARY_DIR}/include
+        ${CMAKE_CURRENT_BINARY_DIR}/private_include )
+target_compile_definitions ( jansson PRIVATE
+        -DHAVE_CONFIG_H
+        -DVALGRIND=1
+        -DJANSSON_USING_CMAKE )
+
 if ( ${CMAKE_CXX_COMPILER_ID}x MATCHES "MSVCx" )
     target_compile_definitions ( jansson PRIVATE 
-            -D_CRT_SECURE_NO_WARNINGS
-            -Dinline=_inline )
-    target_compile_options ( jansson PRIVATE /wd4005 /wd4996 /wd4706 )
+            -D_CRT_SECURE_NO_WARNINGS )
+    target_compile_options ( jansson PRIVATE /wd4005 /wd4996 )
 endif ( )
-
-
