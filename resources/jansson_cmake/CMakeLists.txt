@@ -219,15 +219,15 @@ else ( )
     configure_file (${${PROJECT_NAME}_SOURCE_DIR}/cmake/jansson_config.h.cmake
                     ${CMAKE_CURRENT_BINARY_DIR}/include/jansson_config.h)
 
-    # Copy the jansson.h file to the public include folder
-    file (COPY ${${PROJECT_NAME}_SOURCE_DIR}/src/jansson.h
-               DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/include/)
-
     # configure the private config file
     configure_file (${${PROJECT_NAME}_SOURCE_DIR}/cmake/jansson_private_config.h.cmake
                     ${CMAKE_CURRENT_BINARY_DIR}/private_include/jansson_private_config.h)
 
 endif ( )
+
+# Copy the jansson.h file to the public include folder
+file (COPY ${${PROJECT_NAME}_SOURCE_DIR}/src/jansson.h
+           DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/include/)
 
 # check deplibs cache
 if ( STATICLIB_USE_DEPLIBS_CACHE )
