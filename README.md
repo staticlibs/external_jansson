@@ -6,10 +6,8 @@ Jansson JSON library build for Staticlibs
 
 This project is a part of [Staticlibs](http://staticlibs.net/).
 
-This project contains a CMake wrapper for the [Jansson library](http://www.digip.org/jansson/). 
-
-Jansson sources imported from [CentOS lookaside](https://github.com/ojdkbuild/lookaside_jansson.git)
-are used as a submodule of this project.
+This project contains a CMake wrapper for the [Jansson library](http://www.digip.org/jansson/) that
+can be used to build sources imported from [CentOS lookaside](https://github.com/staticlibs/lookaside_jansson.git).
 
 Link to the [documentation](https://jansson.readthedocs.org/en/2.10/).
 
@@ -22,7 +20,8 @@ To build the library on Windows using Visual Studio 2013 Express run the followi
 Visual Studio development command prompt 
 (`C:\Program Files (x86)\Microsoft Visual Studio 12.0\Common7\Tools\Shortcuts\VS2013 x86 Native Tools Command Prompt`):
 
-    git clone --recursive https://github.com/staticlibs/external_jansson.git
+    git clone https://github.com/staticlibs/lookaside_jansson.git
+    git clone https://github.com/staticlibs/external_jansson.git
     cd external_jansson
     mkdir build
     cd build

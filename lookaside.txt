@@ -1,0 +1,1 @@
+https://github.com/staticlibs/lookaside_jansson/tree/30c0f7c5fc391ecd8f80a12ac18e605dac690c07

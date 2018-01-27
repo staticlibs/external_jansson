@@ -16,7 +16,9 @@
 cmake_minimum_required ( VERSION 2.8.12 )
 project ( jansson C )
 
-set ( ${PROJECT_NAME}_SOURCE_DIR ${CMAKE_CURRENT_LIST_DIR}/../../jansson )
+if ( NOT DEFINED ${PROJECT_NAME}_LOOKASIDE_DIR )
+    set ( ${PROJECT_NAME}_LOOKASIDE_DIR ${CMAKE_CURRENT_LIST_DIR}/../../../lookaside_jansson )
+endif ( )
 
 if ( external_jansson_ENABLE_PRECONFIGURATION AND STATICLIB_TOOLCHAIN MATCHES "(android|windows)_[^_]+_[^_]+" )
     file (COPY ${CMAKE_CURRENT_LIST_DIR}/${STATICLIB_TOOLCHAIN}/jansson_config.h
@@ -30,7 +32,7 @@ else ( )
     OPTION (USE_WINDOWS_CRYPTOAPI "Use CryptGenRandom to seed the hash function." ON)
 
     # for CheckFunctionKeywords
-    set ( CMAKE_MODULE_PATH "${${PROJECT_NAME}_SOURCE_DIR}/cmake" )
+    set ( CMAKE_MODULE_PATH "${${PROJECT_NAME}_LOOKASIDE_DIR}/cmake" )
 
     include (CheckCSourceCompiles)
     include (CheckFunctionExists)
@@ -216,17 +218,17 @@ else ( )
     set (JANSSON_INITIAL_HASHTABLE_ORDER 3 CACHE STRING "Number of buckets new object hashtables contain is 2 raised to this power. The default is 3, so empty hashtables contain 2^3 = 8 buckets.")
 
     # configure the public config file
-    configure_file (${${PROJECT_NAME}_SOURCE_DIR}/cmake/jansson_config.h.cmake
+    configure_file (${${PROJECT_NAME}_LOOKASIDE_DIR}/cmake/jansson_config.h.cmake
                     ${CMAKE_CURRENT_BINARY_DIR}/include/jansson_config.h)
 
     # configure the private config file
-    configure_file (${${PROJECT_NAME}_SOURCE_DIR}/cmake/jansson_private_config.h.cmake
+    configure_file (${${PROJECT_NAME}_LOOKASIDE_DIR}/cmake/jansson_private_config.h.cmake
                     ${CMAKE_CURRENT_BINARY_DIR}/private_include/jansson_private_config.h)
 
 endif ( )
 
 # Copy the jansson.h file to the public include folder
-file (COPY ${${PROJECT_NAME}_SOURCE_DIR}/src/jansson.h
+file (COPY ${${PROJECT_NAME}_LOOKASIDE_DIR}/src/jansson.h
            DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/include/)
 
 # check deplibs cache
@@ -241,7 +243,7 @@ if ( STATICLIB_USE_DEPLIBS_CACHE )
 endif ( )
 
 # Add the lib sources.
-file ( GLOB C_FILES ${${PROJECT_NAME}_SOURCE_DIR}/src/*.c )
+file ( GLOB C_FILES ${${PROJECT_NAME}_LOOKASIDE_DIR}/src/*.c )
 add_library ( ${PROJECT_NAME} STATIC ${C_FILES} )
 target_include_directories ( jansson BEFORE PRIVATE
         ${CMAKE_CURRENT_BINARY_DIR}/include
