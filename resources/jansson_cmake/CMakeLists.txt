@@ -254,5 +254,5 @@ target_compile_definitions ( jansson PRIVATE
 if ( ${CMAKE_CXX_COMPILER_ID}x MATCHES "MSVCx" )
     target_compile_definitions ( jansson PRIVATE 
             -D_CRT_SECURE_NO_WARNINGS )
-    target_compile_options ( jansson PRIVATE /wd4005 /wd4996 )
+    target_compile_options ( jansson PRIVATE /wd4005 /wd4996 /wd4090 )
 endif ( )
