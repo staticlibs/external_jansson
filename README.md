@@ -41,6 +41,11 @@ Changelog
 
 **2018-01-27**
 
+ * version 2.10-2
+ * drop submodule
+
+**2018-01-27**
+
  * version 2.10-1
  * update Jansson to rebased version from CentOS 7.4
 
